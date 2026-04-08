@@ -57,6 +57,7 @@ class NormalMapGenerator:
         self._cache[img_path] = N.astype(np.float32)
         return self._cache[img_path]
 
+
     @staticmethod
     def rotate_field_and_vectors(N: np.ndarray, angle_deg: float) -> np.ndarray:
         h, w, _ = N.shape
@@ -140,7 +141,7 @@ class NormalDataset(Dataset):
         elif self.aug_mode == "8dir":
             theta_deg = random.choice(_8DIR_ANGLES)
         else:  # full
-            theta_deg = random.uniform(-180.0, 180.0)
+            theta_deg = random.uniform(-90.0, 90.0)
 
         N0 = self.normal_gen.get_base_normal(img_path)
         N0 = cv2.resize(N0, (self.img_size, self.img_size), interpolation=cv2.INTER_AREA)

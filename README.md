@@ -28,7 +28,7 @@ After calibration, place the generated nnmodel.pth model in the `gelsight/` fold
 
 ```
 gelsight/
-└──nnmodel.pth       # GelSight reconstruction model (from calibration)
+└── nnmodel.pth       # GelSight reconstruction model (from calibration)
 ```
 
 > **Note:** We provide pre-calibrated example nnmodel.pth for quick start. However, using a model calibrated on a different sensor may lead to degraded results.
@@ -76,8 +76,6 @@ Set the checkpoint path in `configs/inference.yaml`, then run:
 ```bash
 python inference.py
 ```
-
-The following shows an example of the real-time residual estimation:
 
 The following shows an example of the real-time residual estimation:
 
