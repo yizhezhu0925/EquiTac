@@ -1,10 +1,5 @@
 # EquiTac--Tactile Orientation Residual Estimation using Equivariant Networks
 
-Rotation-equivariant contact orientation estimation from GelSight Mini tactile sensors using ESCNN.
-
-Given a tactile image, the model predicts the **in-plane rotation angle** of the contact (with 180° ambiguity), exploiting the rotational equivariance of equivariant networks to generalize across orientations with only one training data.
-
-
 ## Dependencies
 
 **Quick install:**
