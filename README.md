@@ -48,6 +48,18 @@ Press `k` to confirm the capture. The image is automatically saved as `gelsight/
 
 ### 3. Collect training data
 
+Place the object on the sensor at a **fixed canonical orientation** (this becomes the 0° reference). The example below shows a stick laid horizontally across the center of the sensor — use whatever orientation is natural for your object, but keep it consistent across all captures.
+
+![Canonical placement example](data/000000.png)
+
+- Capture 3–5 images at this orientation.
+- Small translational shifts between captures are encouraged for robustness.
+- Do **not** rotate the object between captures — rotation augmentation is applied automatically during training.
+
+```bash
+python collect_data/collect_data.py --mode data --save_dir data
+```
+
 See [collect_data/README.md](collect_data/README.md) for the full guide.
 
 ---
@@ -73,6 +85,14 @@ Set the checkpoint path in `configs/inference.yaml`, then run:
 ```bash
 python inference.py
 ```
+
+The following video shows an example of the real-time orientation estimation:
+
+<video src="example/inference_20260408_152012.mp4" controls width="720"></video>
+
+### Recording
+
+Press `r` during inference to toggle video recording on/off. The video is saved as `inference_<timestamp>.mp4` in the project root.
 
 ---
 

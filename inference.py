@@ -6,13 +6,14 @@ Usage:
     python inference.py --config configs/inference.yaml
 
 Controls:
-    k  - capture and save current frame
+    r  - toggle video recording on/off
     q / ESC - quit
 """
 
 import argparse
 import math
 import os
+import time
 import cv2
 import numpy as np
 import torch
@@ -138,7 +139,6 @@ class NormalIrrepPredictor:
         combined = np.zeros((panel_size[1], panel_size[0] * 2, 3), dtype=np.uint8)
         combined[:, : panel_size[0]] = tactile_panel
         combined[:, panel_size[0] :] = normal_panel
-        cv2.putText(combined, "E2 Irrep Orientation", (10, 25), font, 0.6, (255, 255, 0), 1)
         return combined
 
 
@@ -190,23 +190,70 @@ def main():
     print("\n" + "=" * 60)
     print("E2 Irrep Orientation Inference")
     print("=" * 60)
+    print("  r - Toggle video recording")
     print("  q - Quit")
     print("=" * 60 + "\n")
+
+    # Video recording state
+    video_writer = None
+    is_recording = False
+    display_size = (720, 360)  # width x height of the combined visualize() output
+
+    def start_recording(output_path):
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        fps = 25.0
+        writer = cv2.VideoWriter(output_path, fourcc, fps, display_size)
+        if not writer.isOpened():
+            print(f"[Recording] Failed to open video writer: {output_path}")
+            return None
+        print(f"[Recording] Started → {output_path}")
+        return writer
+
+    def stop_recording(writer):
+        writer.release()
+        print("[Recording] Stopped.")
 
     try:
         while True:
             tactile_image = camera.get_image()
+            display = None
             try:
                 results, normal_map = predictor.process_frame(tactile_image)
                 display = predictor.visualize(tactile_image, normal_map, results)
+
+                # Overlay recording indicator
+                if is_recording:
+                    cv2.circle(display, (display_size[0] - 20, 20), 8, (0, 0, 255), -1)
+                    cv2.putText(display, "REC", (display_size[0] - 55, 26),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+
                 cv2.imshow("E2 Irrep Orientation", display)
             except Exception as exc:
                 print(f"Processing error: {exc}")
-                cv2.imshow("E2 Irrep Orientation", tactile_image)
+                display = cv2.resize(tactile_image, display_size)
+                cv2.imshow("E2 Irrep Orientation", display)
 
-            if cv2.waitKey(1) & 0xFF in (ord("q"), 27):
+            if is_recording and video_writer is not None and display is not None:
+                frame = cv2.resize(display, display_size)
+                video_writer.write(frame)
+
+            key = cv2.waitKey(1) & 0xFF
+            if key in (ord("q"), 27):
                 break
+            elif key == ord("r"):
+                if is_recording:
+                    stop_recording(video_writer)
+                    video_writer = None
+                    is_recording = False
+                else:
+                    output_path = f"inference_{time.strftime('%Y%m%d_%H%M%S')}.mp4"
+                    if not os.path.isabs(output_path):
+                        output_path = os.path.join(base, output_path)
+                    video_writer = start_recording(output_path)
+                    is_recording = video_writer is not None
     finally:
+        if is_recording and video_writer is not None:
+            stop_recording(video_writer)
         camera.release()
         cv2.destroyAllWindows()
 
