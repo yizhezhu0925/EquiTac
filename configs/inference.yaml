@@ -4,7 +4,7 @@
 
 model:
   # Path to the trained model checkpoint (.pth)
-  checkpoint_path: "checkpoints/normal_irrep_N8_img240_mse_full_best.pth"
+  checkpoint_path: "checkpoints/normal_irrep_N8_img240_mse_best.pth"
   # Must match the values used during training
   img_size: 240
   N: 8

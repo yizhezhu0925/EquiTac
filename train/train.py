@@ -70,7 +70,7 @@ def train(cfg: dict):
     save_dir = abspath(cfg["training"]["save_dir"])
     os.makedirs(save_dir, exist_ok=True)
 
-    model_name = f"normal_irrep_N{N_group}_img{img_size}_{loss_type}_{aug_mode}_best.pth"
+    model_name = f"normal_irrep_N{N_group}_img{img_size}_{loss_type}_best.pth"
     best_path = os.path.join(save_dir, model_name)
 
     epochs = cfg["training"]["epochs"]

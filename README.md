@@ -65,7 +65,7 @@ python -m train.train
 Checkpoints are saved to `checkpoints/` with the naming convention:
 
 ```
-normal_irrep_N{N}_img{img_size}_mse_{aug_mode}_best.pth
+normal_irrep_N{N}_img{img_size}_mse_best.pth
 ```
 
 ---
