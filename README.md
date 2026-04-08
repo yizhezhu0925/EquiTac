@@ -86,9 +86,9 @@ Set the checkpoint path in `configs/inference.yaml`, then run:
 python inference.py
 ```
 
-The following video shows an example of the real-time orientation estimation:
+The following shows an example of the real-time orientation estimation:
 
-<video src="example/inference_20260408_152012.mp4" controls width="720"></video>
+![Inference demo](example/inference_demo.gif)
 
 ### Recording
 
