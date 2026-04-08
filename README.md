@@ -28,8 +28,7 @@ After calibration, place the generated nnmodel.pth model in the `gelsight/` fold
 
 ```
 gelsight/
-├── nnmodel.pth       # GelSight reconstruction model (from calibration)
-└── background.png    # Background image captured without contact
+└──nnmodel.pth       # GelSight reconstruction model (from calibration)
 ```
 
 > **Note:** We provide pre-calibrated example nnmodel.pth for quick start. However, using a model calibrated on a different sensor may lead to degraded results.
