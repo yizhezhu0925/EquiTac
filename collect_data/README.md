@@ -39,4 +39,4 @@ Press `k` to save the current frame, `q` / `ESC` to quit.
 ## Notes on Applicability
 
 - For most objects, the method detects residual orientation relative to the canonical angle within **±90°**.
-- The method is **not applicable** to objects with full 360° rotational symmetry (e.g., circular objects).
+- The method is **not applicable** to objects with full 360°/90° rotational symmetry (e.g., circular objects).
