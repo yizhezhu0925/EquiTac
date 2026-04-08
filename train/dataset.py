@@ -141,7 +141,7 @@ class NormalDataset(Dataset):
         elif self.aug_mode == "8dir":
             theta_deg = random.choice(_8DIR_ANGLES)
         else:  # full
-            theta_deg = random.uniform(-90.0, 90.0)
+            theta_deg = random.uniform(-180.0, 180.0)
 
         N0 = self.normal_gen.get_base_normal(img_path)
         N0 = cv2.resize(N0, (self.img_size, self.img_size), interpolation=cv2.INTER_AREA)
