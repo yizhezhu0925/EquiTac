@@ -1,0 +1,16 @@
+# Inference configuration
+#
+# Usage: python inference.py --config configs/inference.yaml
+
+model:
+  # Path to the trained model checkpoint (.pth)
+  checkpoint_path: "checkpoints/normal_irrep_N8_img240_mse_full_best.pth"
+  # Must match the values used during training
+  img_size: 240
+  N: 8
+
+sensor:
+  calib_model_path: "gelsight/nnmodel.pth"
+  config_path: "configs/sensor.yaml"
+  bg_image_path: "gelsight/background.png"
+  streamer: "opencv"

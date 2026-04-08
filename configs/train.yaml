@@ -1,0 +1,39 @@
+# Training configuration
+#
+# Usage:
+#   python train.py                          # full augmentation (default)
+#   python train.py --aug_mode none          # no augmentation
+#   python train.py --aug_mode 8dir          # 8-direction augmentation
+#   python train.py --aug_mode full          # full 180° augmentation (default)
+#
+# aug_mode options:
+#   none  - no rotation; label is always 0°
+#   8dir  - rotate by a random multiple of 45° (8 discrete directions: -180° to 135°)
+#   full  - rotate by a uniformly random angle in [-180°, 180°]
+
+data:
+  # Directory containing training PNG images (collected with collect_data.py)
+  data_dir: "data"
+  # Input resolution fed to the model
+  img_size: 240
+
+model:
+  # Cyclic group order for E2-equivariant layers (C_N symmetry)
+  N: 8
+
+augmentation:
+  aug_mode: "full"    # default; overridden by --aug_mode on the command line
+
+training:
+  epochs: 200
+  batch_size: 64
+  lr: 3.0e-4
+  seed: 42
+  loss_type: "mse"
+  save_dir: "checkpoints"
+  save_best_only: true
+
+sensor:
+  calib_model_path: "gelsight/nnmodel.pth"
+  config_path: "configs/sensor.yaml"
+  bg_image_path: "gelsight/background.png"

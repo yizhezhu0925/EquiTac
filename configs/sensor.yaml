@@ -1,0 +1,16 @@
+# GelSight Mini sensor configuration
+# Copy this file and adjust values if you use a different sensor model.
+
+device_name: "GelSight Mini"
+
+# Pixel per millimeter
+ppmm: 0.0634
+
+# Desired (processed) image dimensions
+imgh: 240
+imgw: 320
+
+# Raw camera resolution and framerate (used by ffmpeg streamer only)
+raw_imgh: 2464
+raw_imgw: 3280
+framerate: 25
