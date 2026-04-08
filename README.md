@@ -79,7 +79,18 @@ python inference.py
 
 The following shows an example of the real-time residual estimation:
 
-![Inference demo](example/inference_demo.gif)
+The following shows an example of the real-time residual estimation:
+
+<table>
+  <tr>
+    <td align="center"><b>Reference (0°)</b></td>
+    <td align="center"><b>Inference demo</b></td>
+  </tr>
+  <tr>
+    <td><img src="example/000000.png" width="240"/></td>
+    <td><img src="example/inference_demo.gif" width="480"/></td>
+  </tr>
+</table>
 
 ### Recording
 
