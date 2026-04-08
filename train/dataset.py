@@ -62,24 +62,33 @@ class NormalMapGenerator:
         h, w, _ = N.shape
         M = cv2.getRotationMatrix2D((w / 2.0, h / 2.0), -angle_deg, 1.0)
 
-        def warp(ch):
-            return cv2.warpAffine(ch, M, (w, h), flags=cv2.INTER_LINEAR,
-                                  borderMode=cv2.BORDER_CONSTANT, borderValue=0.0)
+        # Warp each channel; use (0,0,1) as border normal (flat surface)
+        Nx = cv2.warpAffine(N[:, :, 0], M, (w, h), flags=cv2.INTER_LINEAR,
+                            borderMode=cv2.BORDER_CONSTANT, borderValue=0.0)
+        Ny = cv2.warpAffine(N[:, :, 1], M, (w, h), flags=cv2.INTER_LINEAR,
+                            borderMode=cv2.BORDER_CONSTANT, borderValue=0.0)
+        Nz = cv2.warpAffine(N[:, :, 2], M, (w, h), flags=cv2.INTER_LINEAR,
+                            borderMode=cv2.BORDER_CONSTANT, borderValue=1.0)
 
-        Nx, Ny, Nz = warp(N[:, :, 0]), warp(N[:, :, 1]), warp(N[:, :, 2])
-
+        # Mask: 1 where original content exists, 0 for border
         mask = cv2.warpAffine(np.ones((h, w), np.float32), M, (w, h),
-                              flags=cv2.INTER_NEAREST,
-                              borderMode=cv2.BORDER_CONSTANT, borderValue=0.0)
+                            flags=cv2.INTER_NEAREST,
+                            borderMode=cv2.BORDER_CONSTANT, borderValue=0.0)
         mask = (mask > 0.5).astype(np.float32)
 
+        # Rotate the (Nx, Ny) vectors by angle_deg
         rad = math.radians(angle_deg)
         c, s = math.cos(rad), math.sin(rad)
-        Nx2 = (c * Nx - s * Ny) * mask
-        Ny2 = (s * Nx + c * Ny) * mask
-        Nz2 = Nz * mask
+        Nx2 = c * Nx - s * Ny
+        Ny2 = s * Nx + c * Ny
+        Nz2 = Nz
 
-        N_stack = np.stack([Nx2, Ny2, Nz2], axis=-1)
+        # Apply mask: rotated content in foreground, (0,0,1) in border
+        Nx_out = Nx2 * mask + 0.0 * (1.0 - mask)
+        Ny_out = Ny2 * mask + 0.0 * (1.0 - mask)
+        Nz_out = Nz2 * mask + 1.0 * (1.0 - mask)
+
+        N_stack = np.stack([Nx_out, Ny_out, Nz_out], axis=-1)
         norm = np.linalg.norm(N_stack, axis=-1, keepdims=True) + 1e-8
         return np.clip(N_stack / norm, -1.0, 1.0).astype(np.float32)
 
